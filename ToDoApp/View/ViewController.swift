@@ -57,6 +57,8 @@ class ViewController: UIViewController {
         nextControllerButton()
         fetchData()
         bindViews()
+        
+        //Working On delete
     }
 
     func setupViews() {
