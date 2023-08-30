@@ -14,9 +14,9 @@ class ViewController: UIViewController {
     var dataOfText:[String] = []
     
     let headingLabel:UILabel = {
-       let lbl = UILabel()
+        let lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.font = .systemFont(ofSize: 26, weight: .medium)
+        lbl.font = .systemFont(ofSize: 40, weight: .medium)
         lbl.text = "To Do"
         return lbl
     }()
@@ -24,19 +24,20 @@ class ViewController: UIViewController {
     let nextButton:UIButton = {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setImage(UIImage(systemName: "note.text.badge.plus"), for: .normal)
+        btn.setImage(UIImage(systemName: "plus"), for: .normal)
+        btn.tintColor = .black
         return btn
     }()
     
     let tableView:UITableView = {
-       let tv = UITableView()
+        let tv = UITableView()
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.backgroundColor = .systemPurple
         return tv
     }()
     
     var tableLabel: UILabel = {
-       let lbl = UILabel()
+        let lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.font = .systemFont(ofSize: 14, weight: .medium)
         return lbl
@@ -58,9 +59,8 @@ class ViewController: UIViewController {
         fetchData()
         bindViews()
         
-        //Working On delete
     }
-
+    
     func setupViews() {
         
         view.addSubview(tableView)
@@ -68,14 +68,14 @@ class ViewController: UIViewController {
         view.addSubview(nextButton)
         
         NSLayoutConstraint.activate([
-        
+            
             headingLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
             headingLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor ,constant: 50),
             
             nextButton.topAnchor.constraint(equalTo: headingLabel.topAnchor),
             nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            nextButton.widthAnchor.constraint(equalToConstant: 50),
-            nextButton.heightAnchor.constraint(equalToConstant: 50),
+            nextButton.widthAnchor.constraint(equalToConstant: 60),
+            nextButton.heightAnchor.constraint(equalToConstant: 60),
             
             tableView.topAnchor.constraint(equalTo: headingLabel.bottomAnchor, constant: 10),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
@@ -132,8 +132,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         return 100
     }
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let verticalPadding: CGFloat = 8
-
+        let verticalPadding: CGFloat = 4
+        
         let maskLayer = CALayer()
         maskLayer.backgroundColor = UIColor.black.cgColor
         maskLayer.frame = CGRect(x: cell.bounds.origin.x, y: cell.bounds.origin.y, width: cell.bounds.width, height: cell.bounds.height).insetBy(dx: 0, dy: verticalPadding/2)
@@ -141,14 +141,12 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
-        if editingStyle == .delete{
-            dataOfText.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            
+        if editingStyle == .delete {
+                self.dataOfText.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .left)
+                print(self.dataOfText)
         }
-        
     }
-    
 }
 
 extension ViewController: PassData {
