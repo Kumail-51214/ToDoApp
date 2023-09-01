@@ -4,6 +4,14 @@
    <FileRef
       location = "group:ToDoApp.xcodeproj">
    </FileRef>
+   <Group
+      location = "group:Pods/.."
+      name = "Frameworks">
+      <FileRef
+         location = "build:Pods_ToDoApp.framework"
+         assignedFileDataType = "com.apple.framework">
+      </FileRef>
+   </Group>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
    </FileRef>

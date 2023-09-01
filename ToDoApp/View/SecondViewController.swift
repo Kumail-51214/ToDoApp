@@ -9,6 +9,8 @@ import UIKit
 import FirebaseCore
 import FirebaseFirestore
 
+
+
 protocol PassData {
     func dataPassing(data:String)
 }
@@ -44,7 +46,6 @@ class SecondViewController: UIViewController {
     }()
     
     var delegate:PassData?
-    
     let viewModel = ViewModel()
     
     var textFieldCenterYConstraint:NSLayoutConstraint?
@@ -57,11 +58,9 @@ class SecondViewController: UIViewController {
         returnToViewController()
         backToViewController()
         addPadding()
-        
         notificationObserver()
         
     }
-    
     func setupViews() {
         
         view.addSubview(textField)
@@ -88,9 +87,8 @@ class SecondViewController: UIViewController {
         
         textFieldCenterYConstraint = textField.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         textFieldCenterYConstraint?.isActive = true
-
+        
     }
-    
     func notificationObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(keyboardWillHide)))
@@ -129,7 +127,6 @@ class SecondViewController: UIViewController {
     @objc func handleReturn() {
         let newData = textField.text ?? "nil"
         self.delegate?.dataPassing( data: newData)
-        viewModel.postData(data: newData)
         self.navigationController?.popViewController(animated: true)
     }
     

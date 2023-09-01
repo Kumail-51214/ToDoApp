@@ -8,10 +8,10 @@
 import UIKit
 import FirebaseCore
 import FirebaseFirestore
+import FirebaseAuth
+
 
 class ViewController: UIViewController {
-    
-    var dataOfText:[String] = []
     
     let headingLabel:UILabel = {
         let lbl = UILabel()
@@ -44,6 +44,9 @@ class ViewController: UIViewController {
     }()
     
     let viewModel = ViewModel()
+    let cellIdentifier = "cell"
+    
+    var todoModelArray:[MyToDoModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,12 +89,12 @@ class ViewController: UIViewController {
     }
     func bindViews() {
         viewModel.didFetchedData = {
-            self.dataOfText = self.viewModel.dataArray
+            self.todoModelArray = self.viewModel.todoArray
             self.tableView.reloadData()
         }
     }
     func registerCell() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
     }
     
     func setProtocolsAndDelegates() {
@@ -120,13 +123,13 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = self.dataOfText[indexPath.row]
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+        cell.textLabel?.text = self.todoModelArray[indexPath.row].todo
+        
         return cell
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataOfText.count
+        return todoModelArray.count
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
@@ -142,16 +145,22 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
         if editingStyle == .delete {
-                self.dataOfText.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .left)
-                print(self.dataOfText)
+            
+            viewModel.deleteData(todoId: todoModelArray[indexPath.row].todoID)
+            self.todoModelArray.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .left)
         }
     }
 }
 
+
 extension ViewController: PassData {
     func dataPassing(data: String) {
-        self.dataOfText.append(data)
+        
+        let todoID = UUID().uuidString
+        let todo = MyToDoModel(todo: data, todoID: todoID)
+        self.todoModelArray.append(todo)
+        viewModel.postData(todo: data,todoID: todoID)
         tableView.reloadData()
     }
 }
