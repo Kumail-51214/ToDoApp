@@ -98,10 +98,8 @@ class ViewController: UIViewController {
     }
     
     func setProtocolsAndDelegates() {
-        
         tableView.delegate = self
         tableView.dataSource = self
-        
     }
     
     func nextControllerButton() {
